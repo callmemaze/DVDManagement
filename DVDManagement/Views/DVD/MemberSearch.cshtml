@@ -1,14 +1,17 @@
 ﻿@model IEnumerable<DVDManagement.ViewModel.MemberSearchViewModel>
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Member Search";
 }
 
 <h1>View</h1>
 
+<form asp-controller="DVD" asp-action="MemberSearch" method="get">
 <p>
-    <a asp-action="Create">Create New</a>
+    Title: <input type="text" name="SearchString" />
+        <input type="submit" value="Filter" />
 </p>
+</form>
 <table class="table">
     <thead>
         <tr>

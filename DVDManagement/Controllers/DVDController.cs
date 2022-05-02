@@ -120,5 +120,33 @@ namespace DVDManagement.Controllers
             var lst = list.Where(x => x?.member?.MemberLastName == SearchString).ToList();
             return View(lst);
         }
+
+        public IActionResult LoanList()
+        {
+            var member = dataBaseContext!.MemberModel!.ToList();
+            var loan = dataBaseContext!.LoanModel!.ToList();
+            var dvdCopy = dataBaseContext!.DVDCopyModel!.ToList();
+            var dvd = dataBaseContext!.DVDTitleModel!.ToList();
+
+            var result = from d in dvdCopy 
+                         join dvdTitle in dvd on d?.DVDNumber equals dvdTitle?.DVDNumber into table1
+                         from t in table1.ToList()
+                         join l in loan on d?.CopyNumber equals l?.CopyNumber into table2
+                         from lt in table2.ToList()
+                         join m in member on lt.MemberNumber equals m.MemberNumber into table3
+                         from mt in table3.ToList()
+                         select new LoanListViewModel
+                         {
+                             dvdCopy = d,
+                             dvd = t,
+                             loan = lt,
+                             member = mt,
+                         };
+            var list = result.Where(x => x?.loan?.DateReturned == null).ToList();
+            return View(list);
+        }
+
+
+
     }
 }
