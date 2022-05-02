@@ -12,17 +12,45 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DVDManagement.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20220411120014_AuthenticationAdded")]
-    partial class AuthenticationAdded
+    [Migration("20220429152555_SecondMigration")]
+    partial class SecondMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("DVDManagement.Models.LoanModel", b =>
+                {
+                    b.Property<string>("LoanNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CopyNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateDue")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOut")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateReturned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LoanTypeNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MemberNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LoanNumber");
+
+                    b.ToTable("LoanModel");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {

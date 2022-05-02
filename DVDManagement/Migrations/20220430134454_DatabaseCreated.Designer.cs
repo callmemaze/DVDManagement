@@ -4,6 +4,7 @@ using DVDManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DVDManagement.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    partial class AuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220430134454_DatabaseCreated")]
+    partial class DatabaseCreated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,17 +45,17 @@ namespace DVDManagement.Migrations
                     b.Property<string>("CastMemberModelNo")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ActorNumber")
+                    b.Property<string>("ActorNumberActorId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("DVDNumber")
+                    b.Property<string>("DVDNumber1")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CastMemberModelNo");
 
-                    b.HasIndex("ActorNumber");
+                    b.HasIndex("ActorNumberActorId");
 
-                    b.HasIndex("DVDNumber");
+                    b.HasIndex("DVDNumber1");
 
                     b.ToTable("CastMemberModel");
                 });
@@ -442,17 +444,17 @@ namespace DVDManagement.Migrations
 
             modelBuilder.Entity("DVDManagement.Models.CastMemberModel", b =>
                 {
-                    b.HasOne("DVDManagement.Models.ActorModel", "ActorNumberModel")
+                    b.HasOne("DVDManagement.Models.ActorModel", "ActorNumber")
                         .WithMany()
-                        .HasForeignKey("ActorNumber");
+                        .HasForeignKey("ActorNumberActorId");
 
-                    b.HasOne("DVDManagement.Models.DVDTitleModel", "DVDNumberModel")
+                    b.HasOne("DVDManagement.Models.DVDTitleModel", "DVDNumber")
                         .WithMany()
-                        .HasForeignKey("DVDNumber");
+                        .HasForeignKey("DVDNumber1");
 
-                    b.Navigation("ActorNumberModel");
+                    b.Navigation("ActorNumber");
 
-                    b.Navigation("DVDNumberModel");
+                    b.Navigation("DVDNumber");
                 });
 
             modelBuilder.Entity("DVDManagement.Models.DVDCopyModel", b =>

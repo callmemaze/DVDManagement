@@ -1,0 +1,55 @@
+﻿@model IEnumerable<DVDManagement.ViewModel.ProducerViewModel>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model!.dvd!.DVDTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model!.dvd!.DVDReleased)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model!.studio!.StudioName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model!.producer!.ProducerName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item!.dvd!.DVDTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item!.dvd!.DVDReleased)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item!.studio!.StudioName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item!.producer!.ProducerName)
+            </td>
+            
+            <td>
+                <a asp-action="Edit" asp-route-id="@item!.dvd!.DVDNumber">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item!.dvd!.DVDNumber">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item!.dvd!.DVDNumber">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
