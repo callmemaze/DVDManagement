@@ -1,0 +1,71 @@
+@model IEnumerable<DVDManagement.ViewModel.ActorLoanViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<form asp-controller="DVD" asp-action="SearchCastMember" method="get">
+<p>
+    Title: <input type="text" name="searchString" />
+        <input type="submit" value="Filter" />
+</p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model!.Dvd!.DVDTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model!.Actor!.ActorSurname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model!.Dvd!.StudioModel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model!.Dvd!.ProducerModel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model!.Dvd!.DVDReleased)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model!.LoanCount)
+            </th>
+           
+        </tr>
+    </thead>
+    <tbody>
+    
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="3" style="color:red">
+                No Match Found
+            </td>
+        </tr>
+    }
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item!.Dvd!.DVDTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item!.Actor!.ActorSurname)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item!.Dvd!.StudioNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item!.Dvd!.ProducerNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item!.LoanCount)
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+

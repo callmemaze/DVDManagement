@@ -2,7 +2,7 @@
 
 namespace DVDManagement.ViewModel
 {
-    internal class LoanListViewModel
+    public class LoanListViewModel
     {
         public DVDCopyModel? dvdCopy { get; set; }
         public DVDTitleModel? dvd { get; set; }

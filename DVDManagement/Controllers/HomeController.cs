@@ -17,7 +17,27 @@ namespace DVDManagement.Controllers
         {
             return View();
         }
-
+        [HttpGet]
+        public IActionResult Login(string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            /*if (Login == admin)
+            {
+                return RedirectToAction("Home", "Admin");
+            }
+            else
+            {
+                return RedirectToAction("Home", "Users");
+            }*/
+            return View();
+        }
+        [HttpGet]
+        public IActionResult Register(string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

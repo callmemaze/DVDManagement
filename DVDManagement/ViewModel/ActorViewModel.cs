@@ -2,7 +2,7 @@
 
 namespace DVDManagement.ViewModel
 {
-    internal class ActorViewModel
+    public class ActorViewModel
     {
         public ActorModel? actor { get; set; }
         public DVDTitleModel? dvd { get; set; }

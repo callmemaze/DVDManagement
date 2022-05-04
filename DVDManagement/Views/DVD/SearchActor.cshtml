@@ -70,11 +70,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item!.dvd!.ProducerModel!.ProducerNumber)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item!.dvd!.DVDNumber">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item!.dvd!.DVDNumber">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item!.dvd!.DVDNumber">Delete</a>
-            </td>
+            
         </tr>
 }
     </tbody>
