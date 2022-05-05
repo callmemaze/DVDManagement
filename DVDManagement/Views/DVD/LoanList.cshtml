@@ -7,7 +7,7 @@
 <h1>View</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a >Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -54,11 +54,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item!.loan!.DateReturned)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item!.loan!.LoanNumber">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item!.loan!.LoanNumber">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item!.loan!.LoanNumber">Delete</a>
-            </td>
+            
         </tr>
 }
     </tbody>

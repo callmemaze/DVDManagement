@@ -15,7 +15,7 @@ namespace DVDManagement.Controllers
             dataBaseContext = db;
         }
 
-        public IActionResult SearchActor(string SearchString)
+        public IActionResult SearchActor(string searchString)
         {
             var actor = dataBaseContext!.ActorModel!.ToList();
             var castMember = dataBaseContext!.CastMemberModel!.ToList();
@@ -32,9 +32,9 @@ namespace DVDManagement.Controllers
                              dvd = t,
                              actor = i,
                          };
-            if (!String.IsNullOrEmpty(SearchString))
+            if (!String.IsNullOrEmpty(searchString))
             {
-                var list = result.Where(x => x?.actor?.ActorSurname == (SearchString) || SearchString == null).ToList();
+                var list = result.Where(x => x?.actor?.ActorSurname == (searchString)).ToList();
                 return View(list);
             }
             else
@@ -43,7 +43,47 @@ namespace DVDManagement.Controllers
             }
             
         }
-        public IActionResult CopyNumberSearch(string SearchString)
+        
+        public IActionResult SearchCastMember(string searchString)
+        {
+            var actor = dataBaseContext!.ActorModel!.ToList();
+            var castMember = dataBaseContext!.CastMemberModel!.ToList();
+            var dvd = dataBaseContext!.DVDTitleModel!.ToList();
+            var dvdCopy = dataBaseContext!.DVDCopyModel!.ToList();
+            var loan = dataBaseContext!.LoanModel!.ToList();
+
+            var result = from c in castMember
+                join d in dvd on c?.DVDNumber equals d?.DVDNumber into table1
+                from t in table1.ToList()
+                join a in actor on c.ActorNumber equals a.ActorId into table2
+                from i in table2.ToList()
+                join d2 in dvdCopy on t.DVDNumber equals d2.DVDNumber into table3
+                from dt in table3.ToList()
+                join l in loan on dt.CopyNumber equals l.CopyNumber into table4
+                from lt in table4.ToList()
+                select new ActorLoanViewModel
+                {
+                    CastMember = c,
+                    Dvd = t,
+                    Actor = i,
+                    DvdCopy = dt,
+                    Loan = lt,
+                    LoanCount = table4.Count(x => x?.DateReturned == null)
+                };
+            
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var list = result.Where(x => x?.Actor?.ActorSurname == (searchString)).ToList();
+                return View(list);
+            }
+            else
+            {
+                return View(result);
+            }
+            
+        }
+        
+        public IActionResult CopyNumberSearch(string searchString)
         {
             var member = dataBaseContext!.MemberModel!.ToList();
             var loan = dataBaseContext!.LoanModel!.ToList();
@@ -61,9 +101,9 @@ namespace DVDManagement.Controllers
                                      member = t,
                                  };
             
-            if (!String.IsNullOrEmpty(SearchString))
+            if (!String.IsNullOrEmpty(searchString))
             {
-                var list = result.Where(x => x?.loan?.CopyNumber == SearchString).ToList();
+                var list = result.Where(x => x?.loan?.CopyNumber == searchString).ToList();
                 return View(list);
             }
             else
@@ -128,25 +168,23 @@ namespace DVDManagement.Controllers
             var dvdCopy = dataBaseContext!.DVDCopyModel!.ToList();
             var dvd = dataBaseContext!.DVDTitleModel!.ToList();
 
-            var result = from d in dvdCopy 
-                         join dvdTitle in dvd on d?.DVDNumber equals dvdTitle?.DVDNumber into table1
-                         from t in table1.ToList()
-                         join l in loan on d?.CopyNumber equals l?.CopyNumber into table2
-                         from lt in table2.ToList()
-                         join m in member on lt.MemberNumber equals m.MemberNumber into table3
-                         from mt in table3.ToList()
-                         select new LoanListViewModel
-                         {
-                             dvdCopy = d,
-                             dvd = t,
-                             loan = lt,
-                             member = mt,
-                         };
+            var result = from d in dvdCopy
+                join dvdTitle in dvd on d?.DVDNumber equals dvdTitle?.DVDNumber into table1
+                from t in table1.ToList()
+                join l in loan on d?.CopyNumber equals l?.CopyNumber into table2
+                from lt in table2.ToList()
+                join m in member on lt.MemberNumber equals m.MemberNumber into table3
+                from mt in table3.ToList()
+                select new LoanListViewModel
+                {
+                    dvdCopy = d,
+                    dvd = t,
+                    loan = lt,
+                    member = mt,
+                };
             var list = result.Where(x => x?.loan?.DateReturned == null).ToList();
             return View(list);
         }
-
-
-
     }
 }
+    

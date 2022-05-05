@@ -2,7 +2,7 @@
 
 namespace DVDManagement.ViewModel
 {
-    internal class MemberSearchViewModel
+    public class MemberSearchViewModel
     {
         public MemberModel? member { get; set; }
         public LoanModel? loan { get; set; }
