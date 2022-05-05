@@ -32,5 +32,7 @@ namespace DVDManagement.Data
         public DbSet<LoanTypeModel>? LoanTypeModel { get; set; }
         public DbSet<MemberModel>? MemberModel { get; set; }
         public DbSet<MembershipCategoryModel>? MembershipCategoryModel { get; set; }
+        public DbSet<Claim> Claims { get; set; }
+        public DbSet<User> User { get; set; }
     }
 }
