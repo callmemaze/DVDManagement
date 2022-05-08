@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>View</h1>
+
+<p>
+    <a >Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>DVDTitleName</th>
+            <th>CopyNumber</th>
+            <th>MembershipFirstName</th>
+            <th>DateOut</th>
+            <th>TotalLoans</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+               @item.DVDTitle
+            </td>
+            <td>
+               @item.CopyNumber
+            </td>
+            <td>
+                @item.MemberFirstName
+            </td>
+            <td>
+                @item.DateOut 
+            </td>
+            <td>
+                @item.TotalLoans
+            </td>
+            
+            
+        </tr>
+}
+    </tbody>
+</table>

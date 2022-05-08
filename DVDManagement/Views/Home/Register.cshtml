@@ -1,5 +1,5 @@
 
-
+@model DVDManagement.ViewModel.Register
 @{
     ViewBag.Title = "Register";
     Layout = "_IndexLayout";
@@ -24,24 +24,27 @@
                         name="name"
                         id="name"
                         placeholder="Your Name"
+                        
                       />
                     </div>
                     <div class="form-group">
                       <label for="email"><i class="zmdi zmdi-email"></i></label>
                       <input
                         type="email"
-                        name="email"
+                        name="Email"
                         id="email"
                         placeholder="Your Email"
+                        asp-for="Email"
                       />
                     </div>
                     <div class="form-group">
                       <label for="pass"><i class="zmdi zmdi-lock"></i></label>
                       <input
                         type="password"
-                        name="pass"
+                        name="Password"
                         id="pass"
                         placeholder="Password"
+                        asp-for="Password"
                       />
                     </div>
                     <div class="form-group">
@@ -50,9 +53,10 @@
                       ></label>
                       <input
                         type="password"
-                        name="re_pass"
+                        name="ConfirmPassword"
                         id="re_pass"
                         placeholder="Repeat your password"
+                        asp-for="ConfirmPassword"
                       />
                     </div>
                     <div class="form-group">
@@ -74,6 +78,7 @@
                         id="signup"
                         class="form-submit"
                         value="Register"
+                        
                       />
                     </div>
                   </form>
@@ -82,7 +87,7 @@
                   <figure>
                     <img src="../../image/signup-image.jpg" alt="sing up image" />
                   </figure>
-                  <a asp-area="" asp-controller="Home" asp-action="Login" class="signup-image-link"
+                  <a asp-area="" asp-controller="Home" class="signup-image-link"
                     >I am already member</a>
                 </div>
               </div>

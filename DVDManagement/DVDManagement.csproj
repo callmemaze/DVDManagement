@@ -23,4 +23,8 @@
     <_ContentIncludedByDefault Remove="wwwroot\css\image\container-bg.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\HomePage" />
+  </ItemGroup>
+
 </Project>

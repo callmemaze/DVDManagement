@@ -1,48 +1,37 @@
 ﻿using DVDManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using DVDManagement.ViewModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace DVDManagement.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly UserManager<IdentityUser> _userManager; //for crud
+        private readonly SignInManager<IdentityUser> _signInManager; 
+        public HomeController(ILogger<HomeController> logger, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
+        
         public IActionResult Index()
         {
             return View();
         }
         [HttpGet]
-        public IActionResult Login(string returnUrl)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            /*if (Login == admin)
-            {
-                return RedirectToAction("Home", "Admin");
-            }
-            else
-            {
-                return RedirectToAction("Home", "Users");
-            }*/
-            return View();
-        }
-        [HttpGet]
-        public IActionResult Register(string returnUrl)
-        {
-            ViewData["ReturnUrl"] = returnUrl;
-            
-            return View();
-        }
+        
+        
         public IActionResult Privacy()
         {
             return View();
         }
-
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
