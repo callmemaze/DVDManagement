@@ -1,0 +1,43 @@
+
+@{
+    ViewBag.Title = "Assistance";
+    Layout = "_Layout";
+}
+
+<table class="table">
+    <thead>
+         <tr>
+                    <th>DVD Title</th>
+                    <th>Date Released</th>
+                    <th>Producer Name</th>
+                    <th>Studio Name</th>
+                    <th>Cast Member No</th>
+                    <th>Actor First Name</th>
+                    <th>Actor Last Name</th>
+                </tr>
+    </thead>
+    <tbody>
+        @if (ViewBag.listProducer == null)
+        {
+            <tr>
+                <td colspan="3" style="color:red">
+                    No Match Found
+                </td>
+            </tr>
+        }
+    
+        @foreach (var item in ViewBag.listProducer)
+                {
+                    <tr>
+                        <td>@item.dvdTitle.DVDTitle</td>
+                        <td>@item.dvdTitle.DVDReleased</td>
+                        <td>@item.producer.ProducerName</td>
+                        <td>@item.studio.StudioName</td>
+                        <td>@item.castMember.CastMemberModelNo</td>
+                        <td>@item.actorDetails.ActorFirstName</td>
+                        <td>@item.actorDetails.ActorSurname</td>
+                    </tr>
+                }
+
+    </tbody>
+</table>
