@@ -142,26 +142,7 @@ namespace DVDManagement.Controllers
             //var list = result.Where(x => x?.loan?.CopyNumber == SearchString).ToList();
             return View(result);
         }
-        //function 3
-        public IActionResult MemberSearch(string SearchString)
-        {
-            var member = dataBaseContext!.MemberModel!.ToList();
-            var loan = dataBaseContext!.LoanModel!.ToList();
-            var dvd = dataBaseContext!.DVDCopyModel!.ToList();
-
-            var result = from l in loan
-                         join m in member on l?.MemberNumber equals m?.MemberNumber into table1
-                         from t in table1.ToList()
-                         select new MemberSearchViewModel
-                         {
-                             member = t,
-                             loan = l,
-                         };
-            DateTime currentDate = DateTime.Now.AddDays(30);
-            var list = result.Where(x => x?.loan?.DateOut >= currentDate).ToList();
-            var lst = list.Where(x => x?.member?.MemberLastName == SearchString).ToList();
-            return View(lst);
-        }
+        
         
         //function 10
         public IActionResult OldDvdCopyList(bool copyDeleted = false)
@@ -221,31 +202,7 @@ namespace DVDManagement.Controllers
         }
         
         //function 8
-        public IActionResult MemberTotalLoans()
-        {
-            String c = "0";
-            var member = dataBaseContext.MemberModel?.ToList();
-            var loan = dataBaseContext.LoanModel?.ToList();
-            var membercat = dataBaseContext.MembershipCategoryModel?.ToList();
-
-            var dvd = (from m in member
-                join l in loan on m.MemberNumber equals l.MemberNumber into table1
-                from l in table1.Distinct().ToList().Where(l => l.MemberNumber == m.MemberNumber).Distinct().ToList()
-
-                join mc in membercat on m.MembershipCategoryNumber equals mc.MembershipCategoryNumber into table2
-                from mc in table2.Distinct().ToList().Where(mc => mc.MembershipCategoryNumber == m.MembershipCategoryNumber)
-                group new { l, m, mc } by new { m.MemberFirstName, m.MembershipCategoryNumber, mc.MembershipCategoryTotalLoans }
-                into grp
-                select new
-                {
-                    grp.Key.MemberFirstName,
-                    grp.Key.MembershipCategoryNumber,
-                    grp.Key.MembershipCategoryTotalLoans,
-                    TotalLoans = grp.Count(),
-                }).OrderBy(x => x.MemberFirstName);
-            ViewBag.totalloans = dvd;
-            return View(dvd);
-        }
+        
         
         //function 7
         public IActionResult LoanedDvdList()

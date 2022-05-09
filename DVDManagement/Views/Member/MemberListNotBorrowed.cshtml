@@ -1,0 +1,35 @@
+@{
+    ViewData["Title"] = "MemberListNotBorrowed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Members list who have not borrowed any DVD in last 32 days</h3>
+
+<table class="table text-light mt-3">
+    <thead class='bg-custom'>
+    <tr>
+        <th>MemberFirstName</th>
+        <th>MemberLastName</th>
+        <th>MemberAddress</th>
+        <th>Date out of most recent loan</th>
+        <th>Difference</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in ViewBag.details)
+    {
+        var t = DateTime.Now.ToShortDateString();
+        var d = @item.MaxDates;
+        var diff = (DateTime.Parse(t) - DateTime.Parse(d)).Days;
+
+        <tr>
+            <td>@item.MemberFirstName</td>
+            <td>@item.MemberLastName</td>
+            <td>@item.MemberAddress</td>
+            <td>@item.MaxDates</td>
+            <td>@diff
+            </td> 
+        </tr>
+    }
+    </tbody>
+</table>

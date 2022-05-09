@@ -11,33 +11,31 @@
         <input type="submit" value="Filter" />
     </p>
 </form>
-<form asp-controller="DVD" asp-action="CopyNumberSearch" method="get">
-<p>
-    Title: <input type="text" name="search" />
-        <input type="submit" value="Filter" />
-</p>
-</form>
+
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model!.loan!.CopyNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model!.loan!.MemberNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model!.loan!.DateOut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model!.loan!.DateDue)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model!.loan!.DateReturned)
-            </th>
-            <th></th>
-            
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model!.loan!.LoanNumber)
+                    </th>
+        <th>
+            @Html.DisplayNameFor(model => model!.loan!.CopyNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model!.loan!.MemberNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model!.loan!.DateOut)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model!.loan!.DateDue)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model!.loan!.DateReturned)
+        </th>
+        <th></th>
+
+    </tr>
     </thead>
     <tbody>
         @if (Model.Count() == 0)

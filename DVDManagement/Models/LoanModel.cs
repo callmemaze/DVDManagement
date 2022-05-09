@@ -10,8 +10,8 @@ namespace DVDManagement.Models
         public string? LoanTypeNumber { get; set; }
         public string? CopyNumber { get; set; }
         public string? MemberNumber { get; set; }
-        public DateTime DateOut { get; set; }
-        public DateTime DateDue { get; set; }
-        public DateTime DateReturned { get; set; }
+        public DateTime? DateOut { get; set; }
+        public DateTime? DateDue { get; set; }
+        public DateTime? DateReturned { get; set; }
     }
 }

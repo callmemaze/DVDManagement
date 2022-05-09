@@ -56,98 +56,130 @@ public class AssistanceController : Controller
     }
 
     public async Task<IActionResult> AddDVDTitle
-        (DVDTitleModel dvd, CastMemberModel cast, string dvdNumber,string producerNumber, string actorNumber, string categoryNumber, string studioNumber, string dvdTitleName, string? dvdReleased, string standardCharge, string penaltyCharge)
+    (DVDTitleModel dvd, CastMemberModel cast, string dvdNumber, string producerNumber, string actorNumber,
+        string categoryNumber, string studioNumber, string dvdTitleName, string? dvdReleased, string standardCharge,
+        string penaltyCharge)
     {
-
+        Random r = new Random();
         dvd.StudioNumber = studioNumber;
         dvd.ProducerNumber = producerNumber;
         dvd.CategoryNumber = categoryNumber;
-        dvd.DVDNumber = "1";
+        dvd.DVDNumber = r.Next().ToString();
         dvd.DVDTitle = dvdTitleName;
         dvd.DVDReleased = dvdReleased;
         dvd.StandardCharge = standardCharge;
         dvd.PenaltyCharge = penaltyCharge;
 
 
-        if (ModelState.IsValid)
-        {
-            dataBaseContext.DVDTitleModel?.Update(dvd);
-            var result = await dataBaseContext.SaveChangesAsync();
 
-            await Task.Delay(TimeSpan.FromSeconds(3));
-            //getting recent record of dvd number after some time delay
-            var last = dataBaseContext.DVDTitleModel?.OrderBy(x => x.DVDNumber).LastOrDefault();
-            Console.WriteLine(last?.DVDNumber);
+        dataBaseContext.DVDTitleModel?.Add(dvd);
+        var result = await dataBaseContext.SaveChangesAsync();
 
-            //after getting recent dvd number, creating new cast member record with that dvd number
-            cast.ActorNumber = actorNumber;
-            cast.DVDNumber = last?.DVDNumber;
-            dataBaseContext.CastMemberModel?.Update(cast);
-            await dataBaseContext.SaveChangesAsync();
+        await Task.Delay(TimeSpan.FromSeconds(3));
+        //getting recent record of dvd number after some time delay
+        var last = dataBaseContext.DVDTitleModel?.OrderBy(x => x.DVDNumber).LastOrDefault();
+        Console.WriteLine(last?.DVDNumber);
 
-            Console.WriteLine(result);
-            return RedirectToAction("CreateDVDTitle", new { IsSuccess = true });
+        //after getting recent dvd number, creating new cast member record with that dvd number
+        cast.ActorNumber = actorNumber;
+        cast.DVDNumber = last?.DVDNumber;
+        cast.CastMemberModelNo = r.Next().ToString();
+        dataBaseContext.CastMemberModel?.Add(cast);
+        await dataBaseContext.SaveChangesAsync();
 
-        }
+        Console.WriteLine(result);
+        return RedirectToAction("CreateDVDTitle", new { IsSuccess = true });
+
+
+    }
+
+    //function 6
+    public IActionResult AddDVDCopy() {
+        var dvdcopy = dataBaseContext.DVDCopyModel?.ToList();
+        var dvdtitle = dataBaseContext.DVDTitleModel?.ToList();
+
+        var members = dataBaseContext.MemberModel?.ToList();
+            
+        var loanType = dataBaseContext.LoanTypeModel?.ToList();
+
+        ViewBag.member = members;
+        ViewBag.loanType = loanType;
+
+        var dvd = from dc in dvdcopy
+            join dt in dvdtitle on dc.DVDNumber equals dt.DVDNumber
+            select new { 
+                dvdtitle = dt,
+                dvdcopy = dc,
+            };
+        ViewBag.dvd = dvd;
 
         return View();
     }
     
-    //function 6
-    public IActionResult AddDVDCopy(string memberNumber)
+    
+        [HttpPost]
+        public async Task<IActionResult> AddDVDCopy(LoanModel Loan, string member, string loantype, string copynumber)
         {
-            var Memberage = dataBaseContext.MemberModel.Where(x => x.MemberNumber == memberNumber);
-            ViewBag.MemberAge = Memberage;
-
-            String dob = ViewBag.MemberAge.MemberDateOfBirth;//GETTING MEMBER DOB
+            var memberInfo = dataBaseContext.MemberModel.Where(x => x.MemberNumber == member).First();
+            DateTime dob = memberInfo.MemberDateOfBirth;//GETTING MEMBER DOB
             String todaysDate = DateTime.Now.ToShortDateString();
 
-            //MEMBER NUMBER
-            ViewBag.memberNumber = memberNumber;
+            var today = DateTime.Now.ToShortDateString();
+
 
             //CONVERTING IN DATE TIME
-            DateTime cDOB = DateTime.Parse(dob);
+            DateTime cDOB = dob;
             DateTime ctodaysDate = DateTime.Parse(todaysDate);
 
-            //CALCULATING YEARS FOR AGE
             TimeSpan dayDiff = ctodaysDate.Subtract(cDOB);
             Console.Write(dayDiff.Days.ToString());
             var age = dayDiff.Days / 365;
             Console.Write(age);
 
-            ViewBag.memAge = age;
             
-            var loans = dataBaseContext.LoanModel.ToList();
-            var members = dataBaseContext.MemberModel.ToList();
-            var memberCategory = dataBaseContext.MembershipCategoryModel.ToList();
 
-            var details = from l in loans
-                          join m in members on l.MemberNumber equals m.MemberNumber into table1
-                          from m in table1.Where(m => m.MemberNumber == l.MemberNumber && m.MemberNumber == memberNumber).ToList()
+            var dvd = dataBaseContext.DVDTitleModel?.ToList();
+            var catogory = dataBaseContext.DVDCategoryModel?.ToList();
+            // var dvdCopy = _dbcontext.DVDCopys.ToList();
+            var dvdCopy = dataBaseContext.DVDCopyModel?.Where(x => x.CopyNumber == copynumber).First();
+            var dvdInfo = dataBaseContext.DVDTitleModel?.Where(x => x.DVDNumber == dvdCopy.DVDNumber).First();
 
-                          join mc in memberCategory on m.MembershipCategoryNumber equals mc.MembershipCategoryNumber into table2
-                          from mc in table2.Where(mc => mc.MembershipCategoryNumber == m.MembershipCategoryNumber).ToList()
-                          group new { l, m, mc } by new { m.MemberNumber, m.MembershipCategoryNumber, mc.MembershipCategoryTotalLoans }
-                          into grp
-                          select new
-                          {
-                              grp.Key.MemberNumber,
-                              grp.Key.MembershipCategoryNumber,
-                              grp.Key.MembershipCategoryTotalLoans,
-                              TotalLoans = grp.Count()
-                          };
-            ViewBag.Details = details;
-            //{ MembershipNumber = 8, MembershipCategoryNumber = 5, MembershipCategoryTotalLoans = "20", TotalLoans = 8 }
-            Console.WriteLine("============================================");
-            Console.WriteLine(details);
-            //FOR LOANTYPE
-            ViewBag.LoanTypeNumber = dataBaseContext.LoanTypeModel.ToList();
+            var agerestriction = dvdInfo?.DVDCategoryModel?.AgeRestriction;
 
-            //FOR COPY NUMBER
-            ViewBag.Copy = dataBaseContext.DVDCopyModel?.ToList();
-            return View();
+            Random r = new Random();
+
+            Loan.LoanNumber = r.Next().ToString();
+            Loan.MemberNumber = member;
+            Loan.LoanTypeNumber = loantype;
+            Loan.CopyNumber = copynumber;
+            Loan.DateOut = DateTime.Now;
+            
+            Loan.DateDue = DateTime.Now.AddMonths(3);
+            if (agerestriction == "false")
+            {
+                dataBaseContext.LoanModel?.Add(Loan);
+                await dataBaseContext.SaveChangesAsync();
+
+                return RedirectToAction("AddDVDCopy","Assistance");
+            }
+            if (agerestriction == "true")
+            {
+                if (age > 18)
+                {
+                    dataBaseContext.LoanModel?.Add(Loan);
+                    await dataBaseContext.SaveChangesAsync();
+                    return RedirectToAction("AddDVDCopy","Assistance");
+                }
+
+                ViewBag.message = "hello";
+                return RedirectToAction("AddDVDCopy","Assistance");
+
+                //cannot loan the dvd due to age restriction
+            }
+            return RedirectToAction("AddDVDCopy","Assistance");
+
         }
-    
+        
     //function 13
     
     public IActionResult GetDVDofNoLoan()
@@ -171,50 +203,7 @@ public class AssistanceController : Controller
         return View(dvd);
     }
     
-    //function 12
-    public IActionResult MemberListNotBorrowed()
-        {
-            var loan = dataBaseContext.LoanModel?.ToList();
-            var maxDate = from l in loan
-                          group l by l.MemberNumber
-                          into g
-                          select new
-                          {
-                              MaxDates = (from l in g select l.DateOut).Max(),
-                          };
-            ViewBag.dates = maxDate.ToList();
-            var members = dataBaseContext.MemberModel?.ToList();
-            var dvdCopy = dataBaseContext.DVDCopyModel?.ToList();
-            var dvdTitle = dataBaseContext.DVDTitleModel?.ToList();
-            List<int> difference = new List<int>();
-            dynamic details = null;
-
-            foreach (var dd in ViewBag.dates)
-            {
-
-                DateTime today = DateTime.Now;
-                var dates = DateTime.Parse(dd.MaxDates.ToString());
-                var diff = (today - dates).Days;
-                var data = (from l in loan
-                            join m in members on l.MemberNumber equals m.MemberNumber
-                            join dc in dvdCopy on l.CopyNumber equals dc.CopyNumber
-                            join dt in dvdTitle on dc.DVDNumber equals dt.DVDNumber
-                            where (31 > diff)
-                            group new { l, m, dc, dt } by new { m.MemberFirstName, m.MemberLastName, m.MemberAddress, ViewBag.dates }
-                            into grp
-                            select new
-                            {
-                                grp.Key.MemberFirstName,
-                                grp.Key.MemberLastName,
-                                grp.Key.MemberAddress,
-                                MaxDates = (from l in grp select l.l.DateOut).Max(),
-                                Difference = diff
-                            }).OrderBy(x => x.MemberFirstName);
-                ViewBag.details = data;
-                return View();
-            }
-            return View();
-        }
+    
 
     
     

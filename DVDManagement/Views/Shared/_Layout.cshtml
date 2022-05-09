@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - DVDManagement</title>
+    <title>@ViewData["Title"] - RopeyDVD </title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
@@ -42,12 +42,16 @@
                     <li>
                         <div class="dropdown">
                             <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
+                                DVD
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item" asp-controller="DVD" asp-action="CopyNumberSearch">Copy Number Search</a></li>
+                                <li><a class="dropdown-item" asp-controller="DVD" asp-action="LoanedDvdList">Loaned DVD List</a></li>
+                                <li><a class="dropdown-item" asp-controller="DVD" asp-action="NotLoanedDvdCopyList">Not Loaned DVD Copy</a></li>
+                                <li><a class="dropdown-item" asp-controller="DVD" asp-action="OldDvdCopyList">Old DVD Copy List</a></li>
+                                <li><a class="dropdown-item" asp-controller="DVD" asp-action="ProducerList">Producer List</a></li>
+                                <li><a class="dropdown-item" asp-controller="DVD" asp-action="SearchActor">Search Actor</a></li>
+                                <li><a class="dropdown-item" asp-controller="DVD" asp-action="SearchCastMember">Search Actor Member</a></li>
                             </ul>
                         </div>
                     </li>
@@ -57,7 +61,7 @@
             </div>
             <div class="col-lg-4 text-center">
               <div class="site-logo">
-                <a class="navbar-brand " asp-area="" asp-controller="Home" asp-action="Index">DVDManagement</a>
+                <a class="navbar-brand " asp-area="" asp-controller="HomePage" asp-action="Index">Ropey DVD</a>
               </div>
 
 
@@ -67,19 +71,19 @@
               <nav class="site-navigation text-left mr-auto " role="navigation">
                   <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
                       <li><div class="dropdown">
-                            <a class="btn btn-secondary dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                              Dropdown
+                            <a class="dropdown-toggle" href="#" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                              Assistance
                             </a>
                           
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                              <li><a class="dropdown-item" href="#">Action</a></li>
-                              <li><a class="dropdown-item" href="#">Another action</a></li>
-                              <li><a class="dropdown-item" href="#">Something else here</a></li>
+                              <li><a class="dropdown-item" asp-controller="Assistance" asp-action="AddDVDCopy">Add DVD Copy Copy</a></li>
+                              <li><a class="dropdown-item" asp-controller="Assistance" asp-action="CreateDVDTitle">Create DVD Title</a></li>
+                                <li><a class="dropdown-item" asp-controller="Assistance" asp-action="GetDVDofNoLoan">Get DVD Of No Loan</a></li>
+                                <li><a class="dropdown-item" asp-controller="Assistance" asp-action="ProducerDvdList">Producer DVD List</a></li>
                             </ul>
                           </div></li>
-                      <li><a href="blog.html" class="nav-link">Blog</a></li>
-                      <li><a href="contact.html" class="nav-link">Contact</a></li>
-                      <button class="login-btn"> <a asp-controller="Home" asp-action="Privacy">Login</a> </button>
+                      
+                      <button class="login-btn"> <a asp-controller="Home" asp-action="Index">Logout</a> </button>
                   </ul>
                   
               </nav>

@@ -3,28 +3,90 @@
 <head>
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-</head>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/css/header.css" asp-append-version="true" />
+    </head>
 <body>
 
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DVDManagement</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="Identity/Account/Login">Login</a>
-                    </li>
-                    
-                </ul>
+<div class="site-navbar-wrap">
+      <div class="site-navbar-top">
+        <div class="container py-3">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <div class="d-flex mr-auto">
+                <a href="#" class="d-flex align-items-center mr-4">
+                  <span class="icon-envelope mr-2"></span>
+                  <span class="d-none d-md-inline-block">info@domain.com</span>
+                </a>
+                <a href="#" class="d-flex align-items-center mr-auto">
+                  <span class="icon-phone mr-2"></span>
+                  <span class="d-none d-md-inline-block">+1 234 4567 8910</span>
+                </a>
+              </div>
             </div>
+            <div class="col-6 text-right">
+              <div class="mr-auto">
+                <a href="#" class="p-2 pl-0"
+                  ><span class="icon-twitter"></span
+                ></a>
+                <a href="#" class="p-2 pl-0"
+                  ><span class="icon-facebook"></span
+                ></a>
+                <a href="#" class="p-2 pl-0"
+                  ><span class="icon-linkedin"></span
+                ></a>
+                <a href="#" class="p-2 pl-0"
+                  ><span class="icon-instagram"></span
+                ></a>
+              </div>
+            </div>
+          </div>
         </div>
-    </nav>
-</header>
+      </div>
+
+      <div class="site-navbar site-navbar-target js-sticky-header">
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="col-2">
+              <h1 class="my-0 site-logo"><a asp-controller="Home" asp-action="Index">Ropey DVD</a></h1>
+            </div>
+            <div class="col-10">
+              <nav class="site-navigation text-right" role="navigation">
+                <div class="container">
+                  <div class="d-inline-block d-lg-none ml-md-0 mr-auto py-3">
+                    <a
+                      href="#"
+                      class="site-menu-toggle js-menu-toggle text-white"
+                      ><span class="icon-menu h3"></span
+                    ></a>
+                  </div>
+
+                  <ul
+                    class="site-menu main-menu js-clone-nav d-none d-lg-block"
+                  >
+                    <li class="active" style="background: #0a53be;
+                                                  width: 103px;
+                                                  height: 40px;
+                                                  display: flex;
+                                                  justify-content: center;
+                                                  align-items: center;
+                                                  padding: 20px;
+                                                  border-radius: 5px;
+                                                 float: right;
+                                                  margin: 20px;">
+                      <a href="Identity/Account/Login" class="nav-link" style="    margin-left: -3px;
+                                                                                   font-size: 18px;
+                                                                                   font-family: 'Poppins';">Login</a>
+                    </li>
+                  </ul>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 @RenderBody()
 
