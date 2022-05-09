@@ -24,6 +24,7 @@ public class AssistanceController : Controller
             var castMember = dataBaseContext.CastMemberModel?.ToList();
             var studio = dataBaseContext.StudioModel?.ToList();
             var actor = dataBaseContext.ActorModel?.ToList();
+            var dvdCategory = dataBaseContext.DVDCategoryModel?.ToList();
             var listProducer = from dt in dvdTitle
                                join c in castMember on dt.DVDNumber equals c.DVDNumber into table1
                                from c in table1.ToList().Where(c => c.DVDNumber == dt.DVDNumber).ToList()
@@ -33,10 +34,11 @@ public class AssistanceController : Controller
 
                                join s in studio on dt.StudioNumber equals s.StudioNumber into table3
                                from s in table3.ToList().Where(s => s.StudioNumber == dt.StudioNumber).ToList()
-
+                               
                                join a in actor on c.ActorNumber equals a.ActorId into table4
                                from a in table4.ToList().Where(a => a.ActorId == c.ActorNumber).ToList()
                                orderby dt.DVDReleased ascending, a.ActorSurname ascending
+                               
                                select new { dvdTitle = dt, castMember = c, actorDetails = a, studio = s, producer = p };
             
             ViewBag.listProducer = listProducer;
@@ -52,6 +54,29 @@ public class AssistanceController : Controller
         ViewBag.actor = dataBaseContext.ActorModel;
         ViewBag.category = dataBaseContext.DVDCategoryModel;
         ViewBag.studio = dataBaseContext.StudioModel;
+        
+        var dvdTitle = dataBaseContext.DVDTitleModel?.ToList();
+        var producer = dataBaseContext.ProducerModel?.ToList();
+        var castMember = dataBaseContext.CastMemberModel?.ToList();
+        var studio = dataBaseContext.StudioModel?.ToList();
+        var actor = dataBaseContext.ActorModel?.ToList();
+        var listProducer = from dt in dvdTitle
+            join c in castMember on dt.DVDNumber equals c.DVDNumber into table1
+            from c in table1.ToList().Where(c => c.DVDNumber == dt.DVDNumber).ToList()
+
+            join p in producer on dt.ProducerNumber equals p.ProducerNumber into table2
+            from p in table2.ToList().Where(p => p.ProducerNumber == dt.ProducerNumber).ToList()
+
+            join s in studio on dt.StudioNumber equals s.StudioNumber into table3
+            from s in table3.ToList().Where(s => s.StudioNumber == dt.StudioNumber).ToList()
+
+            join a in actor on c.ActorNumber equals a.ActorId into table4
+            from a in table4.ToList().Where(a => a.ActorId == c.ActorNumber).ToList()
+            orderby dt.DVDReleased ascending, a.ActorSurname ascending
+            select new { dvdTitle = dt, castMember = c, actorDetails = a, studio = s, producer = p };
+            
+        ViewBag.dvd = listProducer; 
+        
         return View();
     }
 

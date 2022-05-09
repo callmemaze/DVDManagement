@@ -1,14 +1,14 @@
 @model IEnumerable<DVDManagement.ViewModel.ActorLoanViewModel>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "SearchCastMember";
     Layout = "_Layout";
 }
 
 <form asp-controller="DVD" asp-action="SearchCastMember" method="get">
 <p>
-    Title: <input type="text" name="searchString" />
-        <input type="submit" value="Filter" />
+    Actor Surname: <input type="text" name="searchString" class="form-control w-50"/>
+        <input type="submit" value="Filter" class="btn btn-primary"/>
 </p>
 </form>
 <table class="table">
