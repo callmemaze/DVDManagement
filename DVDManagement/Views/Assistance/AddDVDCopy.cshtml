@@ -7,39 +7,95 @@
 {
  <p>Age for the DVD is Restricted And member is below the age restriction</p>
 }
-<form asp-controller="Assistance" asp-action="AddDVDCopy" method="post">
-            <div class="form-group">
-                 <label> Producer</label>
-                 <select id="member" name="member" class="form-control" required>
-                        <option value="">Select a Member</option>
-                        @foreach (var name in ViewBag.member)
-                        {
-                            <option value="@name.MemberNumber">  @name.MemberFirstName @name.MemberLastName</option>
-                        }
-                    </select>
-            </div>
-            <div class="form-group">
-                <label> Category</label>
-                 <select id="loantype" name="loantype" class="form-control custom-select bg-white border-left-0 border-md" required>
-                        <option value="">Select a Category</option>
-                        @foreach (var name in ViewBag.loanType)
-                        {
-                            <option value="@name.LoanTypeNumber">@name.LoanType</option>
-                        }
-                    </select>
-            </div>
-            <div class="form-group">
-                <label> DVD</label>
-                 <select id="copynumber" name="copynumber" class="form-control custom-select bg-white border-left-0 border-md" required>
-                        <option value="">Select a copyNumber</option>
-                        @foreach (var name in ViewBag.dvd)
-                        {
-                            <option value="@name.dvdcopy.CopyNumber">@name.dvdtitle.DVDTitle</option>
-                        }
-                    </select>
-            </div>
-            <div class="form-group">
-                <Button type="submit" class="btn btn-primary form-control" >Submit</Button>
-            </div>
-        </form>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Add New Copy
+</button>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close d-flex align-items-center justify-content-center"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true" class="ion-ios-close"></span>
+              </button>
+            </div>
+            <div class="modal-body p-4 py-5 p-md-5">
+              <h3 class="text-center mb-3">Add New Copy</h3>
+  
+              <form asp-controller="Assistance" asp-action="AddDVDCopy"  class="signup-form">
+                <div class="form-group mb-2">
+                  <label for="name">Member</label>
+                  <select id="member" name="member" class="form-control" required>
+                                          <option value="">Select a Member</option>
+                                          @foreach (var name in ViewBag.member)
+                                          {
+                                              <option value="@name.MemberNumber">  @name.MemberFirstName @name.MemberLastName</option>
+                                          }
+                                      </select>
+                </div>
+                <div class="form-group mb-2">
+                  <label>Category</label>
+                  <select id="loantype" name="loantype" class="form-control custom-select bg-white border-left-0 border-md" required>
+                                          <option value="">Select a Category</option>
+                                          @foreach (var name in ViewBag.loanType)
+                                          {
+                                              <option value="@name.LoanTypeNumber">@name.LoanType</option>
+                                          }
+                                      </select>
+                </div>
+                <div class="form-group mb-2">
+                  <label >DVD</label>
+                  <select id="copynumber" name="copynumber" class="form-control custom-select bg-white border-left-0 border-md" required>
+                                          <option value="">Select a copyNumber</option>
+                                          @foreach (var name in ViewBag.dvd)
+                                          {
+                                              <option value="@name.dvdcopy.CopyNumber">@name.dvdtitle.DVDTitle</option>
+                                          }
+                                      </select>
+                </div>
+                <div class="form-group mb-2">
+                  <button
+                    type="submit"
+                    class="form-control btn btn-primary rounded submit px-3"
+                  >
+                    Add New Copy
+                  </button>
+                </div>
+                
+              </form>
+            </div>
+          </div>
+        </div>
+</div>
+
+<table class="table mt-4">
+    <thead class="bg-custom">
+    <tr>
+        <th>DVD Titler</th>
+        <th>Member Name </th>
+        <th>Loan Type</th>
+       
+    </tr>
+    </thead>
+    <tbody>
+        
+    @foreach (var item in ViewBag.dvdList)
+    {
+        <tr>
+            <td style="width:160px">@item.dvdtitle.DVDTitle</td>
+            <td style="width:160px">@item.members.MemberFirstName</td>
+            <td style="width:160px">@item.loanType.LoanType</td>
+        </tr>
+    }
+
+        
+       
+        
+    </tbody>
+</table>

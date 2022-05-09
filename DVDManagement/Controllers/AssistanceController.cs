@@ -124,7 +124,7 @@ public class AssistanceController : Controller
         var dvdtitle = dataBaseContext.DVDTitleModel?.ToList();
 
         var members = dataBaseContext.MemberModel?.ToList();
-            
+        var loan = dataBaseContext.LoanModel?.ToList();
         var loanType = dataBaseContext.LoanTypeModel?.ToList();
 
         ViewBag.member = members;
@@ -138,6 +138,23 @@ public class AssistanceController : Controller
             };
         ViewBag.dvd = dvd;
 
+        var dvdList = from dc in dvdcopy
+            join dt in dvdtitle on dc.DVDNumber equals dt.DVDNumber into table1
+            from dt in table1.ToList()
+            join l in loan on dc.CopyNumber equals l.CopyNumber into table2
+            from l in table2.ToList()
+            join m in members on l.MemberNumber  equals m.MemberNumber into table3
+            from mt in table3.ToList()
+            join lt in loanType on l.LoanTypeNumber equals lt.LoanTypeNumber into table4
+            from lt in table4.ToList()
+            select new { 
+                dvdtitle = dt,
+                dvdcopy = dc,
+                loan = l,
+                members = mt,
+                loanType = lt
+            };
+        ViewBag.dvdList = dvdList;
         return View();
     }
     
@@ -178,14 +195,15 @@ public class AssistanceController : Controller
             Loan.LoanTypeNumber = loantype;
             Loan.CopyNumber = copynumber;
             Loan.DateOut = DateTime.Now;
-            
+            String? date = "00/00/0001";
+            Loan.DateReturned = DateTime.Parse(date);
             Loan.DateDue = DateTime.Now.AddMonths(3);
             if (agerestriction == "false")
             {
                 dataBaseContext.LoanModel?.Add(Loan);
                 await dataBaseContext.SaveChangesAsync();
 
-                return RedirectToAction("AddDVDCopy","Assistance");
+                return RedirectToAction("AddDVDCopy","Assistance", new { IsSuccess = true });
             }
             if (agerestriction == "true")
             {
@@ -193,7 +211,7 @@ public class AssistanceController : Controller
                 {
                     dataBaseContext.LoanModel?.Add(Loan);
                     await dataBaseContext.SaveChangesAsync();
-                    return RedirectToAction("AddDVDCopy","Assistance");
+                    return RedirectToAction("AddDVDCopy","Assistance", new { IsSuccess = true });
                 }
 
                 ViewBag.message = "hello";
