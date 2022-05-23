@@ -1,8 +1,10 @@
 using System.Globalization;
 using DVDManagement.Data;
 using DVDManagement.Models;
+using DVDManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 namespace DVDManagement.Controllers;
 
@@ -10,10 +12,15 @@ namespace DVDManagement.Controllers;
 public class AssistanceController : Controller
 {
     private readonly AuthDbContext dataBaseContext;
+    private readonly UserManager<IdentityUser> _userManager; //for crud
+    private readonly SignInManager<IdentityUser> _signInManager; 
 
-    public AssistanceController(AuthDbContext db)
+    public AssistanceController(AuthDbContext db, UserManager<IdentityUser> userManager,
+        SignInManager<IdentityUser> signInManager)
     {
         dataBaseContext = db;
+        _userManager = userManager;
+        _signInManager = signInManager;
     }
     // GET
     //function 4
@@ -77,6 +84,8 @@ public class AssistanceController : Controller
             
         ViewBag.dvd = listProducer; 
         
+        
+        
         return View();
     }
 
@@ -119,7 +128,9 @@ public class AssistanceController : Controller
     }
 
     //function 6
-    public IActionResult AddDVDCopy() {
+    public IActionResult AddDVDCopy(bool IsSuccess = false)
+    {
+        ViewBag.IsSuccess = IsSuccess;
         var dvdcopy = dataBaseContext.DVDCopyModel?.ToList();
         var dvdtitle = dataBaseContext.DVDTitleModel?.ToList();
 
@@ -195,7 +206,7 @@ public class AssistanceController : Controller
             Loan.LoanTypeNumber = loantype;
             Loan.CopyNumber = copynumber;
             Loan.DateOut = DateTime.Now;
-            String? date = "00/00/0001";
+            String? date = "0001-01-01 00:00:00.0000000";
             Loan.DateReturned = DateTime.Parse(date);
             Loan.DateDue = DateTime.Now.AddMonths(3);
             if (agerestriction == "false")
@@ -246,9 +257,38 @@ public class AssistanceController : Controller
         return View(dvd);
     }
     
-    
+    [HttpPost]
+    public async Task<IActionResult> ResetPasswords(ResetPasswordViewModel model)
+    {
+        
+            var user = await _userManager.GetUserAsync(User); //gets current logged in user records
+            if(user == null)
+            {
+                return Redirect("Identity/Account/Login");
+            }
 
-    
+            //changes user password method is this..
+
+            var result = await _userManager.ChangePasswordAsync(user,model.CurrentPassword,model.NewPassword);
+            if(!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View("ResetPassword");
+            }
+
+            await _signInManager.RefreshSignInAsync(user);
+            return View("ConfirmationPage");
+        
+    }
+
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+    {
+        return View();
+    }
     
     
 }

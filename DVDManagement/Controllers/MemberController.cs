@@ -16,22 +16,35 @@ public class MemberController : Controller
     //function 3
     public IActionResult MemberSearch(string SearchString)
     {
-        var member = dataBaseContext!.MemberModel!.ToList();
-        var loan = dataBaseContext!.LoanModel!.ToList();
-        var dvd = dataBaseContext!.DVDCopyModel!.ToList();
+        DateTime currentDate = DateTime.Now.Date;
+        DateTime lastDate = currentDate.Subtract(new TimeSpan(31, 0, 0, 0, 0));
+        
 
-        var result = from l in loan
-            join m in member on l?.MemberNumber equals m?.MemberNumber into table1
-            from t in table1.ToList()
-            select new MemberSearchViewModel
-            {
-                member = t,
-                loan = l,
-            };
-        DateTime currentDate = DateTime.Now.AddDays(30);
-        var list = result.Where(x => x?.loan?.DateOut >= currentDate).ToList();
-        var lst = list.Where(x => x?.member?.MemberLastName == SearchString).ToList();
-        return View(lst);
+        var dvdTitle = dataBaseContext.DVDTitleModel?.ToList();
+        var dvdCopy = dataBaseContext.DVDCopyModel?.ToList();
+        var castMember = dataBaseContext.CastMemberModel?.ToList();
+        var member = dataBaseContext.MemberModel?.ToList();
+        var loan = dataBaseContext.LoanModel?.ToList();
+
+
+        var details = from d in dvdTitle
+            join dc in dvdCopy
+                on d.DVDNumber equals dc.DVDNumber into table1
+            from dc in table1.ToList().Distinct().Where(dc => dc.DVDNumber == d.DVDNumber)
+            join l in loan on dc.CopyNumber equals l.CopyNumber into table2
+            from l in table2.ToList().Distinct().Where(l => l.CopyNumber == dc.CopyNumber)
+            join c in castMember
+                on dc.DVDNumber equals c.DVDNumber into table3
+            from c in table3.ToList().Distinct().Where(c => c.DVDNumber == dc.DVDNumber)
+            join m in member
+                on l.MemberNumber equals m.MemberNumber into table4
+            from m in table4.ToList().Distinct().Where(m => m.MemberNumber == l.MemberNumber && m.MemberNumber == SearchString && l.DateOut >= lastDate)
+            select new MemberSearchViewModel(){ loan = l, member = m };
+
+        //var r = _context.Actors.FirstOrDefault();
+        //ViewBag.last = r;
+        
+        return View(details);
     }
     
     public IActionResult MemberTotalLoans()

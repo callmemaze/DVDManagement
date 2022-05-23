@@ -5,7 +5,22 @@
 <h1>AddDVDCopy</h1>
 @if (ViewBag.message != null)
 {
- <p>Age for the DVD is Restricted And member is below the age restriction</p>
+    <div class="alert alert-error alert-dismissible fade show" style="z-index: 0" role="alert">
+        <strong>Age for the DVD is Restricted And member is below the age restriction</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (ViewBag.IsSuccess)
+{
+    <div class="alert alert-success alert-dismissible fade show" style="z-index: 0" role="alert">
+        <strong>New Add Copy added successfully!</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 }
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Add New Copy

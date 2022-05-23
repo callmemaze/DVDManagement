@@ -4,7 +4,7 @@
     ViewData["Title"] = "Search Actor";
 }
 
-<h1>View</h1>
+<h1>Search Actor</h1>
 
 <form asp-controller="DVD" asp-action="SearchActor" method="get">
 <p>
@@ -65,10 +65,10 @@
                 @Html.DisplayFor(modelItem => item!.actor!.ActorSurname)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item!.dvd!.StudioModel!.StudioNumber)
+                @Html.DisplayFor(modelItem => item!.dvd!.StudioNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item!.dvd!.ProducerModel!.ProducerNumber)
+                @Html.DisplayFor(modelItem => item!.dvd!.ProducerNumber)
             </td>
             
         </tr>

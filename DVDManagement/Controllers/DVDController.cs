@@ -70,7 +70,7 @@ namespace DVDManagement.Controllers
                     Actor = i,
                     DvdCopy = dt,
                     Loan = lt,
-                    LoanCount = table4.Count(x => x?.DateReturned == null)
+                    LoanCount = table4.Count(x => x?.DateReturned == DateTime.Parse("0001-01-01 00:00:00.0000000"))
                 };
             
             if (!String.IsNullOrEmpty(searchString))
@@ -156,7 +156,7 @@ namespace DVDManagement.Controllers
 
             var dvd = from dc in dvdCopy
                 join l in loan on dc.CopyNumber equals l.CopyNumber into table1
-                from l in table1.Distinct().Where(l => l.CopyNumber == dc.CopyNumber && l.DateReturned != null && dc.DatePurchased < lastDate)
+                from l in table1.Distinct().Where(l => l.CopyNumber == dc.CopyNumber && l.DateReturned != DateTime.Parse("0001-01-01 00:00:00.0000000") && dc.DatePurchased < lastDate)
 
                 select new { loan = l, dvdCopy = dc };
             ViewBag.dvdList = dvd;
@@ -185,7 +185,7 @@ namespace DVDManagement.Controllers
                             join dc in dvdCopy on l.CopyNumber equals dc.CopyNumber into table2
                             from dc in table2.Distinct().ToList().Where(dc => dc.CopyNumber == l.CopyNumber).Distinct().ToList()
                             join dt in dvdTitle on dc.DVDNumber equals dt.DVDNumber into table3
-                            from dt in table3.Distinct().ToList().Where(dt => dt.DVDNumber == dc.DVDNumber && l.DateReturned != null).Distinct().ToList()
+                            from dt in table3.Distinct().ToList().Where(dt => dt.DVDNumber == dc.DVDNumber && l.DateReturned != DateTime.Parse("0001-01-01 00:00:00.0000000")).Distinct().ToList()
                             group new { l, m, dc, dt } by new { dt.DVDTitle, dc.CopyNumber, m.MemberFirstName, l.DateOut }
                            into grp
                             select new
@@ -215,7 +215,7 @@ namespace DVDManagement.Controllers
             var member = dataBaseContext.MemberModel?.ToList();
             var loanDetail = (from l in loan
                 join m in member on l.MemberNumber equals m.MemberNumber into table1
-                from m in table1.ToList().Where(m => m.MemberNumber == l.MemberNumber && l.DateReturned == null)
+                from m in table1.ToList().Where(m => m.MemberNumber == l.MemberNumber && l.DateReturned == DateTime.Parse("0001-01-01 00:00:00.0000000"))
                 orderby l.CopyNumber ascending
                 select new { loan = l, member = m });
             ViewBag.loanDetails = loanDetail;
@@ -224,9 +224,10 @@ namespace DVDManagement.Controllers
         public IActionResult EditDvdCopyDetails(string CopyNumber)
         {
             //GET LOAN DETAILS OF THE COPY NUMBER
-            ViewBag.UserLoanDetails = dataBaseContext.LoanModel.Where(l => l.CopyNumber == CopyNumber).First();
+            ViewBag.UserLoanDetails = dataBaseContext.LoanModel.Where(l => l.LoanNumber == CopyNumber).First();
             var cop = ViewBag.UserLoanDetails;
 
+            var copy = ViewBag.UserLoanDetails.CopyNumber;
             //GET DVD OF THE COPY NUMBER
             ViewBag.CopyDVDNumber = dataBaseContext.DVDCopyModel.Where(c => c.CopyNumber == CopyNumber).First();
             string copydvdnum = ViewBag.CopyDVDNumber.DVDNumber;
@@ -237,7 +238,7 @@ namespace DVDManagement.Controllers
             int pCharge = int.Parse(ViewBag.PenaltyCharge);
 
             //CALCULATING DATE OF RETURN
-            DateTime dueDate = DateTime.Parse(ViewBag.UserLoanDetails.DateDue);
+            DateTime dueDate = (ViewBag.UserLoanDetails.DateDue);
             DateTime returnDate = DateTime.Now.Date.Date;
 
             //GETTING ONLY DATE
@@ -262,6 +263,18 @@ namespace DVDManagement.Controllers
             }
 
 
+            return RedirectToAction("LoanedDvdList");
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> UpdateReturnDVD
+            (LoanModel loan, string loanNumber, string loantypenumber, string copynumber, int membernumber, DateTime dateOut, DateTime dateReturned, DateTime dateDue)
+        {
+            loan = dataBaseContext.LoanModel.Where(l => l.LoanTypeNumber == loantypenumber).First();
+
+            loan.DateReturned = dateReturned;
+            dataBaseContext.LoanModel.Update(loan);
+            var result = await dataBaseContext.SaveChangesAsync();
             return RedirectToAction("LoanedDvdList");
         }
     

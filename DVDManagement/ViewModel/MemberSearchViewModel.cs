@@ -6,5 +6,6 @@ namespace DVDManagement.ViewModel
     {
         public MemberModel? member { get; set; }
         public LoanModel? loan { get; set; }
+        
     }
 }
